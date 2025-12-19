@@ -20,3 +20,5 @@ Imports:
 Depends: 
     R (>= 3.5)
 LazyData: true
+URL: https://github.com/g-rashidian/FishGrowth
+BugReports: https://github.com/g-rashidian/FishGrowth/issues
