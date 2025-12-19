@@ -9,13 +9,15 @@ workflow from data import to journal-ready reporting.
 
 You can install and load the latest version from GitHub with:
 
-``` r
-# install.packages("devtools")
-devtools::install_github("g-rashidian/FishGrowth")
+# install.packages(“devtools”)
+
+devtools::install_github(“g-rashidian/FishGrowth”)
 
 # Load the package
+
+\#load the package
+
 library(FishGrowth)
-```
 
 ## 
 

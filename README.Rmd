@@ -10,13 +10,17 @@ output: github_document
 
 You can install and load the latest version from GitHub with:
 
-``` r
+
 # install.packages("devtools")
 devtools::install_github("g-rashidian/FishGrowth")
 
+
 # Load the package
+
+#load the package
+
 library(FishGrowth)
-```
+
 ##
 Quick Start Guide
 The typical workflow involves the following steps:
