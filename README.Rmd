@@ -13,7 +13,7 @@ You can install and load the latest version from [GitHub](https://github.com/) w
 ``` r
 
 # install.packages("devtools")
-devtools::install_github("YourGitHubUsername/FishGrowth")
+devtools::install_github("g-rashidian/FishGrowth")
 #load the package
 library(FishGrowth)
 
