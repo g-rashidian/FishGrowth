@@ -2,14 +2,14 @@
 % Please edit documentation in R/reporting.R
 \name{generate_summary_table}
 \alias{generate_summary_table}
-\title{Generate Summary Table for Journal}
+\title{Generate Summary Table with Units}
 \usage{
 generate_summary_table(df_tank, params_list, error_type = "SE")
 }
 \arguments{
 \item{df_tank}{Dataframe. The tank-level aggregated data.}
 
-\item{params_list}{Vector of strings. Names of parameters to analyze (e.g. c("mean_sgr", "fcr")).}
+\item{params_list}{Vector of strings. Names of parameters to analyze.}
 
 \item{error_type}{String. "SE" (Standard Error) or "SD" (Standard Deviation).}
 }
@@ -17,5 +17,6 @@ generate_summary_table(df_tank, params_list, error_type = "SE")
 A clean dataframe ready for export.
 }
 \description{
-Summarizes parameters with Mean ± SE (or SD) and significance letters.
+Summarizes parameters with Mean ± SE and significance letters.
+Automatically renames variables to professional formats with units.
 }

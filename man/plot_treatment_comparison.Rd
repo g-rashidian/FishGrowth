@@ -2,18 +2,17 @@
 % Please edit documentation in R/plotting.R
 \name{plot_treatment_comparison}
 \alias{plot_treatment_comparison}
-\title{Plot Treatment Comparisons (Boxplot + Points)}
+\title{Plot Treatment Comparisons with Significance Letters}
 \usage{
 plot_treatment_comparison(df, parameter, y_label = NULL)
 }
 \arguments{
 \item{df}{Dataframe (tank level).}
 
-\item{parameter}{String. The column name to plot (e.g. "mean_sgr").}
+\item{parameter}{String. The column name to plot.}
 
 \item{y_label}{String. Label for the Y-axis.}
 }
 \description{
-Visualizes the distribution of a parameter across treatments.
-Includes individual data points to show tank variance.
+Visualizes the distribution of a parameter and adds statistical significance letters.
 }

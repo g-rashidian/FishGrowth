@@ -2,22 +2,20 @@
 % Please edit documentation in R/export.R
 \name{save_project_results}
 \alias{save_project_results}
-\title{Export Full Project Results}
+\title{Export Full Project Results (Data, Tables, Plots, and Stats)}
 \usage{
 save_project_results(df_calc, df_tank, final_table, output_dir = "Results")
 }
 \arguments{
-\item{df_calc}{Dataframe. The individual fish data (processed).}
+\item{df_calc}{Dataframe. Individual fish data.}
 
-\item{df_tank}{Dataframe. The tank-level averages.}
+\item{df_tank}{Dataframe. Tank-level averages.}
 
-\item{final_table}{Dataframe. The specific "Mean ± SE" table generated earlier.}
+\item{final_table}{Dataframe. The final summary table.}
 
-\item{output_dir}{String. Base directory for output (default is "Results").}
-
-\item{raw_stats_list}{List. (Optional) If you want to save full ANOVA tables, pass the results of run_stats_smart here.}
+\item{output_dir}{String. Base directory (default "Results").}
 }
 \description{
 Saves all analysis artifacts to a timestamped folder.
-Includes: Individual data, Tank averages, Final Journal Table, and Detailed Stats.
+Includes: CSVs, Journal Table, PNG Plots, and Detailed Statistical Report.
 }

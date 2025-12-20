@@ -1,26 +1,46 @@
-#' Plot Treatment Comparisons (Boxplot + Points)
+#' Plot Treatment Comparisons with Significance Letters
 #'
-#' Visualizes the distribution of a parameter across treatments.
-#' Includes individual data points to show tank variance.
+#' Visualizes the distribution of a parameter and adds statistical significance letters.
 #'
 #' @param df Dataframe (tank level).
-#' @param parameter String. The column name to plot (e.g. "mean_sgr").
+#' @param parameter String. The column name to plot.
 #' @param y_label String. Label for the Y-axis.
 #' @import ggplot2
+#' @importFrom dplyr group_by summarise
 #' @export
 plot_treatment_comparison <- function(df, parameter, y_label = NULL) {
 
   if(is.null(y_label)) y_label <- parameter
 
-  # Ensure parameter exists
-  if(!parameter %in% names(df)) stop(paste("Column", parameter, "not found in dataframe."))
+  # 1. Run Stats to get the letters
+  # We suppress messages so the console stays clean
+  stats_res <- suppressMessages(run_stats_smart(df, parameter))
+  letters_df <- stats_res$groups
 
+  # 2. Calculate position for the letters (Above the highest point of each group)
+  # We find the max value per treatment to know where to put the "a"
+  label_positions <- df %>%
+    dplyr::group_by(treatment) %>%
+    dplyr::summarise(max_val = max(!!dplyr::sym(parameter), na.rm = TRUE)) %>%
+    merge(letters_df, by = "treatment")
+
+  # Add a little buffer so the letter sits above the boxplot (10% of max height)
+  buffer <- max(df[[parameter]], na.rm = TRUE) * 0.1
+  label_positions$y_pos <- label_positions$max_val + buffer
+
+  # 3. Plot
   p <- ggplot(df, aes(x = treatment, y = .data[[parameter]], fill = treatment)) +
-    geom_boxplot(alpha = 0.6, outlier.shape = NA) + # Hide outliers in boxplot to avoid duplication
-    geom_jitter(width = 0.2, size = 2, alpha = 0.8) + # Show actual tank points
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, size = 2, alpha = 0.8) +
+    # Add the letters
+    geom_text(data = label_positions,
+              aes(x = treatment, y = y_pos, label = groups),
+              size = 6, color = "black", fontface = "bold") +
     theme_minimal() +
-    labs(y = y_label, x = "Treatment", title = paste("Comparison of", parameter)) +
-    theme(legend.position = "none")
+    labs(y = y_label, x = "Treatment", title = paste("Analysis of", parameter)) +
+    theme(legend.position = "none",
+          axis.text.x = element_text(size = 12, face = "bold"),
+          axis.title = element_text(size = 14))
 
   return(p)
 }
