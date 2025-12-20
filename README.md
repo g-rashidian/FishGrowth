@@ -21,7 +21,20 @@ library(FishGrowth)
 
 ## 
 
-Quick Start Guide The typical workflow involves the following steps:
+Quick Start Guide ***To see the full guide at any time, run***
+
+fishgrowth_guide()
+
+# If you type the package name followed by two colons, RStudio will show a popup list of all available tools.
+
+Type this in your console (don’t press Enter yet): FishGrowth::
+
+then Press TAB-\> You will see a dropdown list of all functions
+available to you.
+
+## 
+
+The typical workflow involves the following steps:
 
 before starting, download the data template to fill in your experimental
 data:
@@ -33,6 +46,14 @@ data. get_data_template(“my_fish_data.csv”) This file can be opened in
 Excel or any text editor. Fill in your experimental data following the
 provided format. Once completed, you can import it using the
 `import_fish_data()` function.***
+
+you should set the working directory to the folder where you saved the
+file using setwd(“path/to/your/folder”)
+
+df \<- import_fish_data(‘my_study.csv’)
+
+or you use relative path to import data, however I reccommend using
+absolute path to avoid confusion.
 
 ***The following steps assume you have either simulated data or imported
 your own data using the template.***
@@ -106,4 +127,12 @@ generate_summary_table(df_tank, params)
 6.  Save Full Project Results Export all results (CSVs, Stats, Tables)
     to a timestamped folder.
 
-save_project_results(df_calc, df_tank, params)
+save_project_results(df_calc, df_tank, params) \# Results are saved in
+“Results” folder by default in working directory. \# This creates a
+folder named “Results/YYYY-MM-DD_HH-MM” with all files inside. \# You
+can specify a different output directory if desired
+
+save_project_results(df_calc, df_tank, params, output_dir =
+“My_Results”)
+
+# This creates a folder named “My_Results/YYYY-MM-DD_HH-MM” with all files inside.
