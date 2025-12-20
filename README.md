@@ -37,7 +37,12 @@ available to you.
 The typical workflow involves the following steps:
 
 before starting, download the data template to fill in your experimental
-data:
+data: To get a blank Excel file: Use
+
+get_data_template()
+
+paste or transfer your data into this file and save it as CSV in your
+desired working directory.
 
 # Step 0: Get Data Template
 
@@ -52,14 +57,18 @@ file using setwd(“path/to/your/folder”)
 
 df \<- import_fish_data(‘my_study.csv’)
 
-or you use relative path to import data, however I reccommend using
-absolute path to avoid confusion.
+I recommend using absolute path to avoid confusion.
 
 ***The following steps assume you have either simulated data or imported
 your own data using the template.***
 
+# Step-by-Step Workflow
+
 1.  Generate or Import Data We can use built-in simulation data for
     practice.
+
+To get practice data: Use df \<- create_simulation_data() the default is
+15 fish per tank
 
 # Simulate 3 replicates per treatment
 
@@ -136,3 +145,37 @@ save_project_results(df_calc, df_tank, params, output_dir =
 “My_Results”)
 
 # This creates a folder named “My_Results/YYYY-MM-DD_HH-MM” with all files inside.
+
+# Conclusion
+
+At the end of analysis you will have: - Individual Fish Data CSV - Tank
+Averages CSV - Final Journal Table CSV - Detailed Statistics Report TXT
+
+\*\*\* The report text file provides detailed ANOVA/Kruskal-Wallis
+outputs for each parameter analyzed. \*\*\*
+
+# Here is an example of what the detailed statistics report looks like:
+
+<details>
+
+<summary>
+
+<b>Click here to view a sample Statistical Report</b>
+</summary>
+
+<br>
+
+``` text
+-------------------------------------------------
+ANALYSIS FOR: mean_weight_final 
+-------------------------------------------------
+Method Used: ANOVA 
+
+         ```mean_weight_final   ```groups    ```treatment
+```Diet_C         45.01           a        Diet_C```
+```Diet_B         38.37           b        Diet_B```
+```Diet_A         30.62           c        Diet_A```
+```Control        30.10           c        Control```
+```
+
+(See CSV files for Mean ± SE values) \`\`\`
