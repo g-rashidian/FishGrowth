@@ -9,7 +9,7 @@ generate_summary_table(df_tank, params_list, error_type = "SE")
 \arguments{
 \item{df_tank}{Dataframe. The tank-level aggregated data.}
 
-\item{params_list}{Vector of strings. Names of parameters to analyze.}
+\item{params_list}{Vector of strings. Names of parameters to analyze (e.g., c("SGR", "FCR")).}
 
 \item{error_type}{String. "SE" (Standard Error) or "SD" (Standard Deviation).}
 }

@@ -14,4 +14,5 @@ Dataframe aggregated by Tank and Treatment.
 }
 \description{
 Averages individual fish data per tank to avoid pseudo-replication.
+Renames variables to standard scientific formats (e.g., SGR, FCR).
 }
