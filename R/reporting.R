@@ -4,7 +4,7 @@
 #' Automatically renames variables to professional formats with units.
 #'
 #' @param df_tank Dataframe. The tank-level aggregated data.
-#' @param params_list Vector of strings. Names of parameters to analyze.
+#' @param params_list Vector of strings. Names of parameters to analyze (e.g., c("SGR", "FCR")).
 #' @param error_type String. "SE" (Standard Error) or "SD" (Standard Deviation).
 #' @return A clean dataframe ready for export.
 #' @importFrom dplyr group_by summarise mutate n
@@ -12,30 +12,49 @@
 #' @export
 generate_summary_table <- function(df_tank, params_list, error_type = "SE") {
 
-  # --- UNITS DICTIONARY ---
-  # Maps technical column names to professional labels
+  # --- UNITS DICTIONARY (Matches New Process.R Names) ---
   units_map <- list(
-    "mean_weight_final"    = "Final Weight (g)",
-    "mean_weight_gain_pct" = "Weight Gain (%)",
-    "mean_sgr"             = "SGR (%/day)",
-    "fcr"                  = "FCR",
-    "survival_rate"        = "Survival (%)",
-    "mean_hsi"             = "HSI (%)",
-    "mean_vsi"             = "VSI (%)",
-    "mean_cf"              = "Condition Factor",
-    "feed_intake"          = "Total Feed Intake (g)",
-    "mean_length_final"    = "Final Length (cm)"
+    # Growth
+    "Final_Weight"       = "Final Weight (g)",
+    "Initial_Weight"     = "Initial Weight (g)",
+    "Weight_Gain"        = "Weight Gain (%)",
+    "Total_Biomass_Gain" = "Total Biomass Gain (g)",
+    "SGR"                = "SGR (%/day)",
+    "Final_Length"       = "Final Length (cm)",
+
+    # Efficiency
+    "FCR"                = "FCR",
+    "PER"                = "PER",
+    "Feed_Intake"        = "Total Feed Intake (g/fish)",
+
+    # Health / Indexes
+    "Survival"           = "Survival (%)",
+    "HSI"                = "Hepatosomatic Index (%)",
+    "VSI"                = "Viscerosomatic Index (%)",
+    "PFR"                = "Peritoneal Fat Ratio (%)",
+    "Cond_Factor"        = "Condition Factor (K)",
+
+    # Immune / Antioxidant (Future Proofing)
+    "Lysozyme"           = "Lysozyme (U/mL)",
+    "SOD"                = "SOD Activity (%)",
+    "CAT"                = "CAT Activity (U/mg protein)"
   )
 
   final_table <- data.frame()
 
   for(param in params_list) {
     tryCatch({
-      # 1. Run Stats to get letters
+      # 1. Check if parameter exists in the dataframe
+      if(!param %in% names(df_tank)) {
+        message(paste("⚠️ Warning: Parameter", param, "not found in dataframe. Skipping."))
+        next
+      }
+
+      # 2. Run Stats to get letters
       stats_res <- run_stats_smart(df_tank, param)
       letters_df <- stats_res$groups
 
-      # 2. Calculate Means and Error
+      # 3. Calculate Means and Error
       summary_data <- df_tank %>%
         dplyr::group_by(treatment) %>%
         dplyr::summarise(
@@ -48,17 +67,18 @@ generate_summary_table <- function(df_tank, params_list, error_type = "SE") {
           error_val = if(error_type == "SE") se_val else sd_val
         )
 
-      # 3. Merge Letters
+      # 4. Merge Letters
       merged <- merge(summary_data, letters_df, by = "treatment")
 
-      # 4. Format: "12.50 ± 0.30 a" (Using standard ± symbol)
+      # 5. Format: "12.50 ± 0.30 ᵃ" (Using superscript for letters)
+      # Note: \u00B1 is the unicode for the ± symbol
       merged$formatted <- paste0(
         sprintf("%.2f", merged$mean_val), " \u00B1 ",
-        sprintf("%.2f", merged$error_val), " ",
-        merged$groups
+        sprintf("%.2f", merged$error_val),
+        " <sup>", merged$groups, "</sup>"
       )
 
-      # 5. Clean up for the final row
+      # 6. Prepare Row
       row_data <- merged[, c("treatment", "formatted")]
 
       # USE THE DICTIONARY TO RENAME PARAMETER
@@ -68,11 +88,11 @@ generate_summary_table <- function(df_tank, params_list, error_type = "SE") {
       final_table <- rbind(final_table, row_data)
 
     }, error = function(e) {
-      message(paste("Skipping:", param, "-", e$message))
+      message(paste("❌ Error processing", param, ":", e$message))
     })
   }
 
-  # Pivot to Wide Format
+  # Pivot to Wide Format (Treatments as Columns)
   if(nrow(final_table) > 0) {
     final_wide <- tidyr::pivot_wider(
       final_table,

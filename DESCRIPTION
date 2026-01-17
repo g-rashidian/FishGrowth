@@ -1,6 +1,10 @@
 Package: FishGrowth
 Title: Analysis of fish growth performance
+<<<<<<< HEAD
 Version: 2.0.0
+=======
+Version: 2.0.0.0
+>>>>>>> d41406dd5eb70a66c0c3d687567ca57c3cd9bc18
 Authors@R: 
     person("Ghasem", "Rashidian", , "grashidian@frov.jcu.cz", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
